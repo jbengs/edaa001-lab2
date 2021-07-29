@@ -81,9 +81,54 @@ public class FifoQueue<E> extends AbstractQueue<E> implements Queue<E> {
 	 * @return an iterator over the elements in this queue
 	 */	
 	public Iterator<E> iterator() {
-		return null;
+		return new QueueIterator();
 	}
-	
+
+	private class QueueIterator implements Iterator<E> {
+		private QueueNode<E> pos;
+
+		//Konstruktor
+		private QueueIterator() {
+			if (last != null) {
+				pos = last.next; //placerar pos på first;
+			} else {
+				pos = null;
+			}
+		}
+		/**
+		 * Returns {@code true} if the iteration has more elements.
+		 * (In other words, returns {@code true} if {@link #next} would
+		 * return an element rather than throwing an exception.)
+		 *
+		 * @return {@code true} if the iteration has more elements
+		 */
+		@Override
+		public boolean hasNext() {
+			return (pos != null);
+		}
+
+		/**
+		 * Returns the next element in the iteration.
+		 *
+		 * @return the next element in the iteration
+		 * @throws NoSuchElementException if the iteration has no more elements
+		 */
+		@Override
+		public E next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			E temp = pos.element;
+			if (pos.next == last.next) {
+				pos = null;
+			} else {
+				pos = pos.next;
+			}
+			return temp;
+		}
+	}
+
+
 	private static class QueueNode<E> {
 		E element;
 		QueueNode<E> next;
