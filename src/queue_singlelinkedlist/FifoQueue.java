@@ -19,9 +19,19 @@ public class FifoQueue<E> extends AbstractQueue<E> implements Queue<E> {
 	 * 			to this queue, else false
 	 */
 	public boolean offer(E e) {
-		return false;
+		QueueNode<E> n = new QueueNode<E>(e);
+		if (last == null) {
+			last = n;
+		} else {
+			QueueNode<E> first = last.next;
+			last.next = n;
+			n.next = first;
+		}
+		//Skip the restrictions.
+		return true;
 	}
-	
+
+
 	/**	
 	 * Returns the number of elements in this queue
 	 * @return the number of elements in this queue
