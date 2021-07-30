@@ -12,15 +12,15 @@ import java.util.Queue;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MyFifoQueueTest {
-private FifoQueue<Integer> myIntQueue;
-private FifoQueue<Integer> myIntQueue2;
-private FifoQueue<String> myStringQueue;
+    private FifoQueue<Integer> myIntQueue;
+    private FifoQueue<Integer> myIntQueue2;
+    private FifoQueue<String> myStringQueue;
 
 
     @BeforeEach
     void setUp() {
         myIntQueue = new FifoQueue<Integer>();
-        myIntQueue2  = new FifoQueue<Integer>();
+        myIntQueue2 = new FifoQueue<Integer>();
         myStringQueue = new FifoQueue<String>();
     }
 
@@ -66,7 +66,9 @@ private FifoQueue<String> myStringQueue;
         assertEquals(0, myIntQueue.size(), "Wrong size of empty queue");
     }
 
-    /** Test a single offer followed by a single peek. */
+    /**
+     * Test a single offer followed by a single peek.
+     */
     @Test
     void testPeek() {
         myIntQueue.offer(1);
@@ -99,7 +101,7 @@ private FifoQueue<String> myStringQueue;
      */
     @Test
     void testPollOfEmpty() {
-        assertEquals(null, myIntQueue.poll(), "Poll of empty queue should return null") ;
+        assertEquals(null, myIntQueue.poll(), "Poll of empty queue should return null");
     }
 
     /**
@@ -144,7 +146,7 @@ private FifoQueue<String> myStringQueue;
         myIntQueue.offer(2);
         myIntQueue.poll();
         myIntQueue.poll();
-        assertEquals(0,  myIntQueue.size(), "Wrong size after poll");
+        assertEquals(0, myIntQueue.size(), "Wrong size after poll");
         assertTrue(myIntQueue.isEmpty(), "Queue not empty after poll");
         myIntQueue.offer(3);
         myIntQueue.offer(4);
@@ -224,6 +226,42 @@ private FifoQueue<String> myStringQueue;
     void testAppendTwoEmpty() {
         myIntQueue.append(myIntQueue2);
         assertEquals(myIntQueue.size(), 0);
-        assertEquals(myIntQueue2, 0);
+        assertEquals(myIntQueue2.size(), 0);
     }
+
+    @Test
+    void testAppendOneEmptyToOneNonEmpty() {
+        myIntQueue.offer(1);
+        myIntQueue.offer(2);
+        myIntQueue.offer(3);
+        myIntQueue.append(myIntQueue2);
+        assertEquals(myIntQueue.size(), 3);
+        assertEquals(myIntQueue2.size(), 0);
+        assertEquals(myIntQueue.peek(), 1);
+        assertEquals(myIntQueue2.peek(), null);
+    }
+
+    @Test
+    void testAppendOneNonEmptyToOneEmpty() {
+        myIntQueue2.offer(1);
+        myIntQueue2.offer(2);
+        myIntQueue2.offer(3);
+        myIntQueue.append(myIntQueue2);
+        assertEquals(myIntQueue2.size(), 3);
+        assertEquals(myIntQueue.size(), 0);
+        assertEquals(myIntQueue2.peek(), 1);
+        assertEquals(myIntQueue.peek(), null);
+    }
+
+    @Test
+    void testAppendTwoOneNonEmpty() {
+        myIntQueue.offer(1);
+        myIntQueue2.offer(2);
+        myIntQueue.append(myIntQueue2);
+        assertEquals(myIntQueue.size(), 2);
+        assertEquals(myIntQueue2.size(), 0);
+        assertEquals(myIntQueue.peek(), 1);
+        assertEquals(myIntQueue2.peek(), null);
+    }
+
 }

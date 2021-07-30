@@ -85,14 +85,16 @@ public class FifoQueue<E> extends AbstractQueue<E> implements Queue<E> {
 	 */
 	public void append(FifoQueue<E> q) {
 		if (this == q) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Can't append to one self");
 		}
 		if (this.last != null && q.last != null) {
 			QueueNode<E> first = this.last.next;
 			this.last.next = q.last.next;
 			q.last.next = first;
 			this.last = q.last;
+			this.size = this.size + q.size;
 			q.last = null;
+			q.size = 0;
 		}
 	}
 	
