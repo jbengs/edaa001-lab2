@@ -75,6 +75,26 @@ public class FifoQueue<E> extends AbstractQueue<E> implements Queue<E> {
 		}
 		return null;
 	}
+
+	/**
+	 * Appends the specified queue to this queue
+	 * post: all elements from the specified queue are appended
+	 * to this queue. The specified queue (q) is empty after the call.
+	 * @param q the queue to append
+	 * @throws IllegalArgumentException if this queue and q are identical
+	 */
+	public void append(FifoQueue<E> q) {
+		if (this == q) {
+			throw new IllegalArgumentException();
+		}
+		if (this.last != null && q.last != null) {
+			QueueNode<E> first = this.last.next;
+			this.last.next = q.last.next;
+			q.last.next = first;
+			this.last = q.last;
+			q.last = null;
+		}
+	}
 	
 	/**	
 	 * Returns an iterator over the elements in this queue
@@ -127,7 +147,6 @@ public class FifoQueue<E> extends AbstractQueue<E> implements Queue<E> {
 			return temp;
 		}
 	}
-
 
 	private static class QueueNode<E> {
 		E element;
