@@ -1,35 +1,60 @@
-package testqueue;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+package queue_singlelinkedlist;
+import queue_singlelinkedlist.FifoQueue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-//import queue_delegate.FifoQueue;
-import queue_singlelinkedlist.FifoQueue;
-
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.Iterator;
 
-class TestFifoQueue {
-    private Queue<Integer> myIntQueue;
-    private Queue<String> myStringQueue;
+import static org.junit.jupiter.api.Assertions.*;
+
+class MyFifoQueueTest {
+    private FifoQueue<Integer> myIntQueue;
+    private FifoQueue<Integer> myIntQueue2;
+    private FifoQueue<String> myStringQueue;
+
 
     @BeforeEach
     void setUp() {
         myIntQueue = new FifoQueue<Integer>();
+        myIntQueue2 = new FifoQueue<Integer>();
         myStringQueue = new FifoQueue<String>();
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         myIntQueue = null;
+        myIntQueue2 = null;
         myStringQueue = null;
+    }
+
+    @Test
+    void offer() {
+    }
+
+    @Test
+    void size() {
+    }
+
+    @Test
+    void peek() {
+    }
+
+    @Test
+    void poll() {
+    }
+
+    @Test
+    void append() {
+        myIntQueue.offer(1);
+        myIntQueue2.offer(2);
+    }
+
+    @Test
+    void iterator() {
     }
 
     /**
@@ -41,7 +66,9 @@ class TestFifoQueue {
         assertEquals(0, myIntQueue.size(), "Wrong size of empty queue");
     }
 
-    /** Test a single offer followed by a single peek. */
+    /**
+     * Test a single offer followed by a single peek.
+     */
     @Test
     void testPeek() {
         myIntQueue.offer(1);
@@ -74,7 +101,7 @@ class TestFifoQueue {
      */
     @Test
     void testPollOfEmpty() {
-        assertEquals(null, myIntQueue.poll(), "Poll of empty queue should return null") ;
+        assertEquals(null, myIntQueue.poll(), "Poll of empty queue should return null");
     }
 
     /**
@@ -119,7 +146,7 @@ class TestFifoQueue {
         myIntQueue.offer(2);
         myIntQueue.poll();
         myIntQueue.poll();
-        assertEquals(0,  myIntQueue.size(), "Wrong size after poll");
+        assertEquals(0, myIntQueue.size(), "Wrong size after poll");
         assertTrue(myIntQueue.isEmpty(), "Queue not empty after poll");
         myIntQueue.offer(3);
         myIntQueue.offer(4);
@@ -194,4 +221,47 @@ class TestFifoQueue {
             assertEquals(Integer.valueOf(i), itr3.next(), "Wrong result from itr3.next");
         }
     }
+
+    @Test
+    void testAppendTwoEmpty() {
+        myIntQueue.append(myIntQueue2);
+        assertEquals(myIntQueue.size(), 0);
+        assertEquals(myIntQueue2.size(), 0);
+    }
+
+    @Test
+    void testAppendOneEmptyToOneNonEmpty() {
+        myIntQueue.offer(1);
+        myIntQueue.offer(2);
+        myIntQueue.offer(3);
+        myIntQueue.append(myIntQueue2);
+        assertEquals(myIntQueue.size(), 3);
+        assertEquals(myIntQueue2.size(), 0);
+        assertEquals(myIntQueue.peek(), 1);
+        assertEquals(myIntQueue2.peek(), null);
+    }
+
+    @Test
+    void testAppendOneNonEmptyToOneEmpty() {
+        myIntQueue2.offer(1);
+        myIntQueue2.offer(2);
+        myIntQueue2.offer(3);
+        myIntQueue.append(myIntQueue2);
+        assertEquals(myIntQueue2.size(), 3);
+        assertEquals(myIntQueue.size(), 0);
+        assertEquals(myIntQueue2.peek(), 1);
+        assertEquals(myIntQueue.peek(), null);
+    }
+
+    @Test
+    void testAppendTwoOneNonEmpty() {
+        myIntQueue.offer(1);
+        myIntQueue2.offer(2);
+        myIntQueue.append(myIntQueue2);
+        assertEquals(myIntQueue.size(), 2);
+        assertEquals(myIntQueue2.size(), 0);
+        assertEquals(myIntQueue.peek(), 1);
+        assertEquals(myIntQueue2.peek(), null);
+    }
+
 }
